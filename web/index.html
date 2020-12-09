@@ -10,5 +10,37 @@
             network requests are done using Javascript and the web server is written
             in C++ using the <a href="https://gitlab.com/eidheim/Simple-Web-Server">Simple-Web-Server</a> library.
         </p>
+
+        <div>
+            <textarea id="user-input"></textarea>
+            <button id="fetch-result">Submit</button>
+        </div>
+        <div id="result-box">Result: </div>
+
+        <script>
+            const button = document.getElementById("fetch-result");
+            const resultDiv = document.getElementById("result-box");
+            button.addEventListener("click", function() {
+                const userText = document.getElementById("user-input").value;
+                const url = '/json'; 
+                const body = {
+                	name: userText,
+                    job: "leader"
+                };
+  
+                fetch(url, {
+                	method: 'post',
+                	headers: {
+                	    'Accept': 'application/json, text/plain, */*',
+                	    'Content-Type': 'application/json'
+                	},
+                	body: JSON.stringify(body)
+                }).then(res=>res.json())
+                .then(res => {
+                	console.log(res);
+                    resultDiv.innerHTML = "Result: " + JSON.stringify(res);
+                });
+            });
+        </script>
     </body>
 </html>

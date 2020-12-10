@@ -6,6 +6,8 @@ RUN apt-get update \
   && apt-get clean python3-setuptools python3-dev python3\
   && rm -rf /var/lib/apt/lists/*
 
+RUN pip3 install nltk
+
 WORKDIR /project
 COPY . .
 

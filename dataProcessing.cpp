@@ -14,9 +14,8 @@ class DataProcessor {
     }
 
     void calcSentiment() {
-        string command = "python3 ../python/main.py " + fileName;
+        string command = "python3 ./python/main.py " + fileName + " Twitter";
 
-        cout << command << endl;
         system(command.c_str()); 
 
         return;
@@ -28,7 +27,7 @@ class DataProcessor {
         fileWriter << data;
         fileWriter.close();
 
-        fileName = "tempdData.txt";
+        fileName = "tempData.txt";
 
         return;
     }

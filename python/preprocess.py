@@ -3,27 +3,32 @@ import string
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import TweetTokenizer
-from nltk.corpus import twitter_samples, stopwords
+from nltk.corpus import stopwords
 from nltk.tag import pos_tag
 from nltk import FreqDist
 
-nltk.download('averaged_perceptron_tagger')
+nltk.download('stopwords')
 
 # preprocess takes in a list of strings and outputs a frequency distribution
-def preprocess(data):
+def preprocess(data, tag=False):
     tokenizedData = []
     for text in data:
         tokenizedData.append(tokenize(text, "twitter"))
     
-    taggedData = []
-    for text in tokenizedData:
-        taggedData.append(pos_tag(tokenizedData))
+    if tag == True:
+        taggedData = []
+        for text in tokenizedData:
+            taggedData.append(pos_tag(tokenizedData))
     
-    finalData = []
-    for text in tokenizedData:
-        finalData.append(removeStopWords(text))
-    
-    freqDist = getFrequencyDist(finalData)
+        finalData = []
+        for text in taggedData:
+            finalData.append(removeStopWords(text))
+    else:
+        finalData = []
+        for text in tokenizedData:
+            finalData.append(removeStopWords(text))
+
+    return finalData
 
 def tokenize(data, dataType):
     if dataType == "twitter":

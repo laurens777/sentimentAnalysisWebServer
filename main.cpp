@@ -15,11 +15,11 @@ int checkArguments(int, char[]);
 
 
 int main(int argc, char *argv[]) {
-    //if (checkArguments(argc, *argv) == 0) {
-    //    return 0;
-    //}
+    if (checkArguments(argc, *argv) == 0) {
+        return 0;
+    }
 
-    startServer(8080);
+    startServer(atoi(argv[1]));
 }
 
 int checkArguments(int argc, char argv[]) {

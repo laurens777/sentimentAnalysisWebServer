@@ -1,37 +1,26 @@
+# --------------------------------------------------------------------------
+# Main entry point for the sentiment analysis scripts
+#
+# (C) 2020 Laurens Bosman, CMPT383 Fall2020
+# Released under the MIT license
+# email lbosman@sfu.ca
+# -------------------------------------------------------------------------
+
 import os
-import nltk
-from nltk.corpus import twitter_samples
+from bayesModel import runModel
 from preprocess import preprocess
-from bayesModel import trainModel
 
-nltk.download('twitter_samples')
-
+# main entrypoint for sentiment analysis
 def main(fileName, dataType):
-    print("testing")
-    if dataType == "Twitter":
-        if not os.path.exists("./models/TwitterBayesModel.txt"):
-            pTweets = twitter_samples.strings('positive_tweets.json')
-            nTweets = twitter_samples.strings('negative_tweets.json')
-            cleanPTweets = preprocess(pTweets)
-            cleanNTweets = preprocess(nTweets)
-            pDict = []
-            nDict = []
-            for tweet in cleanPTweets:
-                tempDict = {}
-                for token in tweet:
-                    tempDict[token] = True
-                pDict.append(tempDict)
-            for tweet in cleanNTweets:
-                tempDict = {}
-                for token in tweet:
-                    tempDict[token] = True
-                nDict.append(tempDict)
-            dataSet = [(pDict, "Positive"), (nDict, "Negative")]
-            classifier = trainModel(dataSet, dataType)
-
     data = readFile(fileName)
-    print(classifier.classify(dict([token, True] for token in data[1])))
+    inputData = preprocess(data)
 
+    result = runModel(inputData, dataType)
+
+    print(result)
+    return
+
+# retrieve the data from the temporary file
 def readFile(fileName):
     data = []
 

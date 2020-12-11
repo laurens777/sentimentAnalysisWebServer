@@ -7,8 +7,6 @@ from nltk.corpus import stopwords
 from nltk.tag import pos_tag
 from nltk import FreqDist
 
-nltk.download('stopwords')
-
 # preprocess takes in a list of strings and outputs a frequency distribution
 def preprocess(data, tag=False):
     tokenizedData = []

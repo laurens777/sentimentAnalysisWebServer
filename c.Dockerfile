@@ -8,6 +8,9 @@ RUN apt-get update \
 
 RUN pip3 install nltk
 
+RUN python -m nltk.downloader twitter_samples
+RUN python -m nltk.downloader stopwords
+
 WORKDIR /project
 COPY . .
 

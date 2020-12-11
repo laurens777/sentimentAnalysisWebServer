@@ -12,6 +12,10 @@
         </p>
 
         <div>
+            <input type="radio" name="dType" id="twitter">Twitter Tweet</input>
+            <input type="radio" name="dType" id="movie">Movie Review</input>
+            <input type="radio" name="dType" id="product">Product Review</input>
+            <br></br>
             <textarea id="user-input"></textarea>
             <button id="fetch-result">Submit</button>
         </div>
@@ -22,10 +26,20 @@
             const resultDiv = document.getElementById("result-box");
             button.addEventListener("click", function() {
                 const userText = document.getElementById("user-input").value;
+                var dType = ""
+                if (document.getElementById('twitter').checked) {
+                    dType = "Twitter";
+                }
+                if (document.getElementById('movie').checked) {
+                    dType = "Movie"
+                }
+                if (document.getElementById('product').checked) {
+                    dType = "Product"
+                }
                 const url = '/json'; 
                 const body = {
                 	name: userText,
-                    job: "leader"
+                    dataType: dType
                 };
   
                 fetch(url, {
@@ -35,7 +49,7 @@
                 	    'Content-Type': 'application/json'
                 	},
                 	body: JSON.stringify(body)
-                }).then(res=>res.json())
+                }).then(res=>res.text())
                 .then(res => {
                 	console.log(res);
                     resultDiv.innerHTML = "Result: " + JSON.stringify(res);

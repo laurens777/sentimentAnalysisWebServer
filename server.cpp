@@ -30,7 +30,7 @@ using namespace std;
 using HttpServer = SimpleWeb::Server<SimpleWeb::HTTP>;
 using HttpClient = SimpleWeb::Client<SimpleWeb::HTTP>;
 
-// Function for activating 
+// Function for activating the server
 int startServer(int port) {
     HttpServer server;
     server.config.port = port;
@@ -92,17 +92,23 @@ int startServer(int port) {
         }
     };
 
+    //main POST code, receives data from the js query
+    //returns positive or negative result to the frontend
     server.resource["^/json$"]["POST"] = [](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
         try {
             boost::property_tree::ptree pt;
             read_json(request->content, pt);
 
             auto data = pt.get<string>("name");
+            auto dataType = pt.get<string>("dataType");
 
-            DataProcessor processor = DataProcessor(data);
+            cout << "Data: " << data << endl;
 
+            DataProcessor processor = DataProcessor(data, dataType);
             processor.storeData();
-            processor.calcSentiment();
+            data = processor.calcSentiment();
+
+            cout << "Result: " << data << endl;
 
             *response << "HTTP/1.1 200 OK\r\n"
                 << "Content-Length: " << data.length() << "\r\n\r\n"

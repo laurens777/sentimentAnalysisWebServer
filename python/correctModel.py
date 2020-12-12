@@ -1,3 +1,12 @@
+# --------------------------------------------------------------------------
+# Given that the Naive Bayes model cannot be updated this function
+# will rerun the training of the model using the data provided by the user.
+#
+# (C) 2020 Laurens Bosman, CMPT383 Fall2020
+# Released under the MIT license
+# email lbosman@sfu.ca
+# -------------------------------------------------------------------------
+
 import nltk
 from nltk.corpus import twitter_samples, movie_reviews
 from nltk import NaiveBayesClassifier

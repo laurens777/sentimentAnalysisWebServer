@@ -1,5 +1,12 @@
-import string
+# --------------------------------------------------------------------------
+# Functions for tokenizing, removing stop words and part-of-speech tagging.
+#
+# (C) 2020 Laurens Bosman, CMPT383 Fall2020
+# Released under the MIT license
+# email lbosman@sfu.ca
+# -------------------------------------------------------------------------
 
+import string
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import TweetTokenizer

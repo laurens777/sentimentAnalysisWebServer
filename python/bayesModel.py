@@ -1,3 +1,11 @@
+# --------------------------------------------------------------------------
+# Implementation of the Naive Bayes classifier.
+#
+# (C) 2020 Laurens Bosman, CMPT383 Fall2020
+# Released under the MIT license
+# email lbosman@sfu.ca
+# -------------------------------------------------------------------------
+
 import pickle
 import nltk
 from nltk import NaiveBayesClassifier

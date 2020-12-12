@@ -10,6 +10,8 @@ RUN pip3 install nltk
 
 RUN python -m nltk.downloader twitter_samples
 RUN python -m nltk.downloader stopwords
+RUN python -m nltk.downloader movie_reviews
+RUN python -m nltk.downloader punkt
 
 WORKDIR /project
 COPY . .

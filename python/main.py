@@ -13,7 +13,7 @@ from preprocess import preprocess
 # main entrypoint for sentiment analysis
 def main(fileName, dataType):
     data = readFile(fileName)
-    inputData = preprocess(data)
+    inputData = preprocess(data, dataType)
 
     result = runModel(inputData, dataType)
 

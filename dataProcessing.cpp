@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <regex>
 
 //#include <Python.h>
 
@@ -20,10 +21,19 @@ class DataProcessor {
     string data;
     string dataType;
     string fileName;
+    string correction;
+    string posCorrections;
+    string negCorrections;
 
     DataProcessor(string content, string dType) {
         data = content;
         dataType = dType;
+    }
+
+    DataProcessor(string content, string dType, string sent) {
+        data = content;
+        dataType = dType;
+        correction = sent;
     }
 
     //calcSentiment calls the python script and returns "Postive" or "Negative"
@@ -73,7 +83,15 @@ class DataProcessor {
         pclose(stream);
         }
 
-        return result;
+        const regex txtRegex("Positive\\n");
+        string sentiment;
+        if (regex_match(result, txtRegex)) {
+            sentiment = "Positive";
+        } else {
+            sentiment = "Negative";
+        }
+
+        return sentiment;
     }
 
     //store data to a text file so that the Python script is able to access it
@@ -84,6 +102,38 @@ class DataProcessor {
         fileWriter.close();
 
         fileName = "tempData.txt";
+
+        return;
+    }
+
+    void storeCorrection() {
+        ofstream fileWriter;
+        if (correction == "positive") {
+            fileWriter.open("posCorrection.txt", ios_base::app);
+            fileWriter << data << "\n";
+            fileWriter.close();
+            posCorrections = "posCorrection.txt";
+        } else {
+            fileWriter.open("negCorrection.txt", ios_base::app);
+            fileWriter << data << "\n";
+            fileWriter.close();
+            negCorrections = "negCorrection.txt";
+        }
+
+        return;
+    }
+
+    void updateModel() {
+        string cmd;
+        if (correction == "positive") {
+            cout << "positive correction" << endl;
+            cmd = "python3 ./python/correctModel.py " + posCorrections + " " + dataType + " " + correction;
+        } else {
+            cout << "negative correction" << endl;
+            cmd = "python3 ./python/correctModel.py " + negCorrections + " " + dataType + " " + correction;
+        }
+
+        system(cmd.c_str());
 
         return;
     }

@@ -14,7 +14,7 @@
         <div>
             <input type="radio" name="dType" id="twitter">Twitter Tweet</input>
             <input type="radio" name="dType" id="movie">Movie Review</input>
-            <input type="radio" name="dType" id="product">Product Review</input>
+            <!--<input type="radio" name="dType" id="product">Product Review</input>-->
             <br></br>
             <textarea id="user-input"></textarea>
             <button id="fetch-result">Submit</button>
@@ -25,6 +25,7 @@
             const button = document.getElementById("fetch-result");
             const resultDiv = document.getElementById("result-box");
             button.addEventListener("click", function() {
+                resultDiv.innerHTML = "Result: CALCULATING";
                 const userText = document.getElementById("user-input").value;
                 var dType = ""
                 if (document.getElementById('twitter').checked) {
@@ -33,9 +34,9 @@
                 if (document.getElementById('movie').checked) {
                     dType = "Movie"
                 }
-                if (document.getElementById('product').checked) {
-                    dType = "Product"
-                }
+                //if (document.getElementById('product').checked) {
+                //    dType = "Product"
+                //}
                 const url = '/json'; 
                 const body = {
                 	name: userText,
@@ -52,9 +53,49 @@
                 }).then(res=>res.text())
                 .then(res => {
                 	console.log(res);
-                    resultDiv.innerHTML = "Result: " + JSON.stringify(res);
+                    str = res.replace(/^"|"$/g, '');
+                    resultDiv.innerHTML = "Result: " + str + " \
+                    <div><p>If the output is incorrect please submit the correct sentiment classification</p> \
+                    <input type=\"radio\" name=\"sent\" id=\"positive\">Positive</input> \
+                    <input type=\"radio\" name=\"sent\" id=\"negative\">Negative</input> \
+                    <button onclick=\"handleSentimentClick()\">Submit</button></div>";
                 });
             });
+        </script>
+        <script>
+            function handleSentimentClick() {
+                var correctSent = ""
+                var sent = ""
+                if (document.getElementById('positive').checked) {
+                    sent = "positive";
+                    }
+                if (document.getElementById('negative').checked) {
+                    sent = "negative"
+                }
+                const userText = document.getElementById("user-input").value;
+                var dType = ""
+                if (document.getElementById('twitter').checked) {
+                    dType = "Twitter";
+                }
+                if (document.getElementById('movie').checked) {
+                    dType = "Movie"
+                }
+                const url = '/sent'; 
+                const body = {
+                    sentiment: sent,
+                    data: userText,
+                    dataType: dType
+                };
+
+                fetch(url, {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                	    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                })
+            }
         </script>
     </body>
 </html>

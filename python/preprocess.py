@@ -8,10 +8,10 @@ from nltk.tag import pos_tag
 from nltk import FreqDist
 
 # preprocess takes in a list of strings and outputs a frequency distribution
-def preprocess(data, tag=False):
+def preprocess(data, dataType, tag=False):
     tokenizedData = []
     for text in data:
-        tokenizedData.append(tokenize(text, "twitter"))
+        tokenizedData.append(tokenize(text, dataType))
     
     if tag == True:
         taggedData = []
@@ -29,7 +29,7 @@ def preprocess(data, tag=False):
     return finalData
 
 def tokenize(data, dataType):
-    if dataType == "twitter":
+    if dataType == "Twitter":
         tokenizer = TweetTokenizer()
         tokens = tokenizer.tokenize(data)
     else:

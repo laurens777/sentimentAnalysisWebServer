@@ -120,6 +120,34 @@ int startServer(int port) {
         }
     };
 
+    // POST code for receiving corrections from the frontend if a user submits it
+    server.resource["^/sent$"]["POST"] = [](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
+        try {
+            boost::property_tree::ptree pt;
+            read_json(request->content, pt);
+
+            auto data = pt.get<string>("data");
+            auto dType = pt.get<string>("dataType");
+            auto sent = pt.get<string>("sentiment");
+
+            cout << endl << "Correction" << endl;
+            cout << "Data: " << data << endl;
+            cout << "Data type: " << dType << endl;
+            cout << "Supposed to be: " << sent << endl << endl;
+
+            DataProcessor processor = DataProcessor(data, dType, sent);
+            processor.storeCorrection();
+
+            processor.updateModel();
+
+            *response << "HTTP/1.1 200 OK\r\n";
+        }
+        catch(const exception &e) {
+            *response << "HTTP/1.1 400 Bad Request\r\nContent-Length: " << strlen(e.what()) << "\r\n\r\n"
+                << e.what();
+        }
+    };
+
     // Start server and receive assigned port when server is listening for requests
     promise<unsigned short> server_port;
     thread server_thread([&server, &server_port]() {
